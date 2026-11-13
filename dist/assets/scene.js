@@ -261,16 +261,23 @@ window.Space = (() => {
       camera.setViewOffset(W, H, cur.ox * W, cur.oy * H, W, H);
     }
 
+    // Đo lại kích thước thật của khung mỗi khung hình: Safari trên iPhone đổi chiều cao
+    // (thanh địa chỉ co/giãn) mà không phải lúc nào cũng phát sự kiện resize.
+    const targetPR = () => Math.min(devicePixelRatio || 1, 2);
     function resize() {
-      W = host.clientWidth || innerWidth;
-      H = host.clientHeight || innerHeight;
+      const w = Math.round(host.clientWidth || innerWidth);
+      const h = Math.round(host.clientHeight || innerHeight);
+      if (!w || !h) return;
+      if (w === W && h === H && renderer.getPixelRatio() === targetPR()) return;
+      W = w;
+      H = h;
       L = layout();
-      renderer.setPixelRatio(Math.min(devicePixelRatio, W < 700 ? 1.5 : 1.8));
+      renderer.setPixelRatio(targetPR());
       renderer.setSize(W, H, false);
       camera.aspect = W / H;
       camera.updateProjectionMatrix();
       starU.pr.value = renderer.getPixelRatio();
-      osCur = L.os;
+      if (mode !== 'focus') osCur = L.os;
     }
     resize();
     overviewPose(cur);
@@ -357,6 +364,7 @@ window.Space = (() => {
 
     function frame() {
       raf = requestAnimationFrame(frame);
+      resize();
       const dt = Math.min(clock.getDelta(), 0.05);
       elapsed += dt;
 
@@ -425,6 +433,8 @@ window.Space = (() => {
 
     const onResize = () => resize();
     addEventListener('resize', onResize);
+    window.visualViewport && visualViewport.addEventListener('resize', onResize);
+    addEventListener('pageshow', onResize);
 
     return {
       focus(key) {
