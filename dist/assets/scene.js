@@ -34,7 +34,7 @@ window.Space = (() => {
     return t;
   }
 
-  function create({ host, labels = {}, reduced = false, onHover, onSelect, onProgress, onReady }) {
+  function create({ host, labels = {}, reduced = false, avoid = null, onHover, onSelect, onProgress, onReady }) {
     const renderer = new T.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setClearColor(0x03050b, 1);
     renderer.outputColorSpace = T.SRGBColorSpace;
@@ -406,7 +406,8 @@ window.Space = (() => {
       if (mode === 'focus') return; // nhãn đã ẩn khi xem cận cảnh
       // nhãn gần camera (to hơn) được ưu tiên đặt trước
       items.sort((a, b) => b.screen.r - a.screen.r);
-      const placed = [];
+      // vùng cần né (vd. khối chữ giới thiệu): tính như nhãn đã đặt sẵn
+      const placed = (avoid ? avoid() : []).map(r => ({ x: r.left, y: r.top, w: r.width, h: r.height }));
       items.forEach(p => {
         const el = p.label;
         const w = el.offsetWidth, h = el.offsetHeight; // đọc lại mỗi khung: font tải xong / đổi cỡ chữ

@@ -46,6 +46,29 @@
     return `<svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="g${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient><radialGradient id="r${id}" cx=".2" cy=".1" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="320" height="200" fill="url(#g${id})"/><rect width="320" height="200" fill="url(#r${id})"/><rect width="320" height="200" fill="rgba(6,9,20,.28)"/>${shapes[p.cover] || shapes.browser}</svg>`;
   }
 
+  /* ---------- icon SVG (một nét, một độ dày) ---------- */
+  const ICONS = {
+    compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+    sparkles: '<path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.9L12 18.5l-1.8-5.8-5.7-1.9L10.2 9z"/><path d="M19 3v3M20.5 4.5h-3"/>',
+    code: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+    refresh: '<path d="M20 11a8 8 0 0 0-14.6-4.4L4 8M4 3v5h5M4 13a8 8 0 0 0 14.6 4.4L20 16M20 21v-5h-5"/>',
+    layout: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20V9"/>',
+    layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+    server: '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+    box: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+    hammer: '<path d="m14 7 3 3M3 21l9.5-9.5M12 4l8 8-3 3-8-8z"/>',
+    learn: '<path d="M22 9 12 4 2 9l10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>',
+    book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/>',
+    music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    award: '<circle cx="12" cy="9" r="6"/><path d="m8.5 14 -1.5 7 5-3 5 3-1.5-7"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    minus: '<path d="M5 12h14"/>',
+    arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    arrowUpRight: '<path d="M7 17 17 7M8 7h9v9"/>',
+    copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>'
+  };
+  const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+
   /* ---------- nội dung từng mục ---------- */
   const views = {
     about() {
@@ -57,50 +80,42 @@
         </div>
         <p class="lead">${esc(a.intro)}</p>
         <p class="body-text">${esc(a.more)}</p>
-        <div class="stats">${a.stats.map(s => `<div class="stat"><strong>${esc(s.value)}</strong><span>${esc(s.label)}</span></div>`).join('')}</div>
+        <p class="stat-line">${a.stats.map(s => `<span><strong>${esc(s.value)}</strong> ${esc(s.label)}</span>`).join('')}</p>
         <dl class="facts">${a.facts.map(f => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join('')}</dl>
         <h3 class="sub">Câu chuyện của mình</h3>
         <ol class="story">${a.story.map(s => `<li><span class="story-year">${esc(s.year)}</span><p>${esc(s.text)}</p></li>`).join('')}</ol>
         <h3 class="sub">Điều mình theo đuổi</h3>
-        <div class="values">${a.values.map(v => `<div class="value"><span class="value-icon">${esc(v.icon)}</span><div><h4>${esc(v.title)}</h4><p>${esc(v.text)}</p></div></div>`).join('')}</div>
+        <ul class="rows">${a.values.map(v => `<li>${icon(v.icon, 'i row-icon')}<div><h4>${esc(v.title)}</h4><p>${esc(v.text)}</p></div></li>`).join('')}</ul>
         <h3 class="sub">Mình có thể giúp gì</h3>
-        <div class="services">${C.services.map(s => `<div class="service"><span class="value-icon">${esc(s.icon)}</span><h4>${esc(s.title)}</h4><p>${esc(s.text)}</p></div>`).join('')}</div>
+        <ul class="rows rows-2">${C.services.map(s => `<li>${icon(s.icon, 'i row-icon')}<div><h4>${esc(s.title)}</h4><p>${esc(s.text)}</p></div></li>`).join('')}</ul>
         <h3 class="sub">Dạo này</h3>
-        <div class="now">${a.now.map(n => `<div class="now-item"><span>${esc(n.icon)}</span><div><p class="now-label">${esc(n.label)}</p><p>${esc(n.value)}</p></div></div>`).join('')}</div>
+        <dl class="now">${a.now.map(n => `<div>${icon(n.icon, 'i row-icon')}<dt>${esc(n.label)}</dt><dd>${esc(n.value)}</dd></div>`).join('')}</dl>
         <h3 class="sub">Ngoài giờ code</h3>
-        <div class="chips hobbies">${a.hobbies.map(h => `<span class="chip">${esc(h)}</span>`).join('')}</div>
-        <a class="btn btn-primary panel-cta" href="#contact">Cùng làm gì đó nhé <span aria-hidden="true">→</span></a>`;
+        <p class="inline-list">${a.hobbies.map(h => `<span>${esc(h)}</span>`).join('')}</p>
+        <a class="btn btn-primary panel-cta" href="#contact">Cùng làm gì đó nhé ${icon('arrowRight')}</a>`;
     },
     skills() {
-      const total = C.skills.reduce((n, g) => n + g.items.length, 0);
       const levelName = l => ['', 'Làm quen', 'Cơ bản', 'Khá', 'Thành thạo', 'Chuyên sâu'][l] || '';
       return `
         <p class="lead">Bộ công cụ mình dùng hằng ngày để đưa một sản phẩm từ bản phác thảo đến tay người dùng.</p>
-        <div class="skill-summary">
-          <div><strong>${total}</strong><span>công nghệ</span></div>
-          <div><strong>${C.skills.length}</strong><span>lĩnh vực</span></div>
-          <div><strong>Full</strong><span>stack, từ UI đến server</span></div>
-        </div>
         <div class="skill-groups">${C.skills.map(g => `
           <section class="skill-group" style="--c:${g.color}">
-            <h3><i></i>${esc(g.group)}<span>${g.items.length} kỹ năng</span></h3>
+            <h3><i></i>${esc(g.group)}</h3>
             <p class="skill-desc">${esc(g.desc)}</p>
             <ul class="skill-list">${g.items.map(s => `
-              <li title="${levelName(s.level)}">
+              <li class="lv-${s.level}">
                 <span class="skill-name">${esc(s.name)}</span>
-                <span class="skill-years">${s.years} năm</span>
-                <span class="skill-bar" aria-label="${levelName(s.level)}"><i style="width:${s.level * 20}%"></i></span>
+                <span class="skill-meta">${levelName(s.level)} · ${s.years} năm</span>
               </li>`).join('')}
             </ul>
           </section>`).join('')}
         </div>
-        <p class="legend"><span class="skill-bar"><i style="width:100%"></i></span> Chuyên sâu &nbsp;·&nbsp; <span class="skill-bar"><i style="width:60%"></i></span> Khá</p>
         <h3 class="sub">Cách mình làm việc</h3>
-        <ol class="process">${C.process.map((p, i) => `<li><span>0${i + 1}</span><h4>${esc(p.title)}</h4><p>${esc(p.text)}</p></li>`).join('')}</ol>
+        <ol class="process">${C.process.map((p, i) => `<li><span class="step">Bước ${i + 1}</span><h4>${esc(p.title)}</h4><p>${esc(p.text)}</p></li>`).join('')}</ol>
         <h3 class="sub">Kỹ năng mềm</h3>
-        <div class="chips">${C.softSkills.map(s => `<span class="chip">${esc(s)}</span>`).join('')}</div>
+        <p class="inline-list">${C.softSkills.map(s => `<span>${esc(s)}</span>`).join('')}</p>
         <h3 class="sub">Đang tìm hiểu</h3>
-        <div class="chips">${C.learning.map(s => `<span class="chip chip-dashed">${esc(s)}</span>`).join('')}</div>`;
+        <p class="inline-list muted-list">${C.learning.map(s => `<span>${esc(s)}</span>`).join('')}</p>`;
     },
     projects() {
       const cats = ['Tất cả', ...new Set(C.projects.map(p => p.category))];
@@ -111,10 +126,9 @@
           <button class="project" data-index="${i}" data-cat="${esc(p.category)}" style="--a:${p.colors[0]};--b:${p.colors[1]}">
             <span class="project-cover">${cover(p, 'c' + i)}</span>
             <span class="project-info">
-              <span class="project-meta">${esc(p.category)} · ${esc(p.year)}</span>
-              <span class="project-title">${esc(p.title)}<span class="arrow" aria-hidden="true">↗</span></span>
+              <span class="project-title">${esc(p.title)}${icon('arrowUpRight', 'i arrow')}</span>
               <span class="project-tagline">${esc(p.tagline)}</span>
-              <span class="mini-chips">${p.tech.slice(0, 3).map(t => `<span>${esc(t)}</span>`).join('')}</span>
+              <span class="project-meta">${esc(p.category)} · ${esc(p.year)} · ${p.tech.slice(0, 3).map(esc).join(', ')}</span>
             </span>
           </button>`).join('')}
         </div>`;
@@ -122,23 +136,21 @@
     experience() {
       return `
         <p class="lead">Hành trình từ những trang web đầu tiên đến các sản phẩm có người dùng thật.</p>
-        <div class="highlights">${C.highlights.map(h => `<div class="stat"><strong>${esc(h.value)}</strong><span>${esc(h.label)}</span></div>`).join('')}</div>
-        <h3 class="sub">Công việc</h3>
         <ol class="timeline">${C.experience.map(e => `
           <li class="tl-item">
             <span class="tl-dot"></span>
-            <p class="tl-time">${esc(e.time)}<span class="tl-type">${esc(e.type)}</span></p>
+            <p class="tl-time">${esc(e.time)} · ${esc(e.type)}</p>
             <h3>${esc(e.role)}</h3>
             <p class="tl-org">${esc(e.org)} · ${esc(e.place)}</p>
             <p class="body-text">${esc(e.text)}</p>
             <ul>${e.points.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
-            <div class="mini-chips">${e.tech.map(t => `<span>${esc(t)}</span>`).join('')}</div>
+            <p class="tl-tech">${e.tech.map(esc).join(' · ')}</p>
           </li>`).join('')}
         </ol>
         <h3 class="sub">Học vấn</h3>
         ${C.education.map(e => `<div class="edu"><p class="tl-time">${esc(e.time)}</p><h4>${esc(e.title)}</h4><p class="tl-org">${esc(e.org)}</p><p class="body-text">${esc(e.text)}</p></div>`).join('')}
         <h3 class="sub">Chứng chỉ & giải thưởng</h3>
-        <div class="certs">${C.certificates.map(c => `<div class="cert"><span class="cert-icon">✦</span><div><h4>${esc(c.title)}</h4><p>${esc(c.org)} · ${esc(c.year)}</p></div></div>`).join('')}</div>`;
+        <ul class="rows rows-2">${C.certificates.map(c => `<li>${icon('award', 'i row-icon')}<div><h4>${esc(c.title)}</h4><p>${esc(c.org)} · ${esc(c.year)}</p></div></li>`).join('')}</ul>`;
     },
     contact() {
       return `
@@ -146,19 +158,19 @@
         <p class="lead">Một website, một ứng dụng hay chỉ là một cuộc trò chuyện — mình thường phản hồi trong vòng 24 giờ.</p>
         <div class="contact-card">
           <div><p class="muted small">Email</p><p class="contact-email">${esc(C.email)}</p></div>
-          <button class="btn btn-ghost btn-sm copy-email">Sao chép</button>
+          <button class="btn btn-ghost btn-sm copy-email">${icon('copy')} Sao chép</button>
         </div>
         <div class="socials">
-          <a href="${esc(C.github)}" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-          <a href="${esc(C.linkedin)}" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+          <a href="${esc(C.github)}" target="_blank" rel="noopener">GitHub ${icon('arrowUpRight')}</a>
+          <a href="${esc(C.linkedin)}" target="_blank" rel="noopener">LinkedIn ${icon('arrowUpRight')}</a>
           <span class="muted">${esc(C.location)}</span>
         </div>
         <div class="avail">
           <div class="avail-info">
-            <p><span class="pulse"></span>${esc(C.contact.response)}</p>
+            <p><span class="status-dot"></span>${esc(C.contact.response)}</p>
             <p class="muted">${esc(C.contact.hours)}</p>
           </div>
-          <ul>${C.contact.open.map(o => `<li class="${o.on ? 'on' : 'off'}">${o.on ? '✓' : '–'} ${esc(o.label)}</li>`).join('')}</ul>
+          <ul>${C.contact.open.map(o => `<li class="${o.on ? 'on' : 'off'}">${icon(o.on ? 'check' : 'minus')} ${esc(o.label)}</li>`).join('')}</ul>
         </div>
         <h3 class="sub">Gửi lời nhắn</h3>
         <form class="contact-form" novalidate>
@@ -169,7 +181,7 @@
           </div>
           <label>Lời nhắn<textarea name="message" rows="4" required maxlength="3000" placeholder="Mình đang muốn làm…"></textarea></label>
           <p class="form-error" aria-live="polite"></p>
-          <button class="btn btn-primary" type="submit">Gửi lời nhắn <span aria-hidden="true">→</span></button>
+          <button class="btn btn-primary" type="submit">Gửi lời nhắn ${icon('arrowRight')}</button>
         </form>
         <h3 class="sub">Câu hỏi thường gặp</h3>
         <div class="faq">${C.contact.faq.map(f => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div>`;
@@ -179,13 +191,13 @@
   /* ---------- nhãn hành tinh ---------- */
   const tagsHost = $('.planet-tags');
   const labels = {};
-  SECTIONS.forEach((s, i) => {
+  SECTIONS.forEach(s => {
     const b = document.createElement('a');
     b.className = 'planet-tag';
     b.href = '#' + s.key;
     b.dataset.key = s.key;
     b.style.setProperty('--c', s.color);
-    b.innerHTML = `<span class="tag-num">0${i + 1}</span><span class="tag-name">${s.title}</span>`;
+    b.innerHTML = `<span class="tag-dot"></span><span class="tag-name">${s.title}</span>`;
     tagsHost.appendChild(b);
     labels[s.key] = b;
   });
@@ -214,7 +226,6 @@
     const s = byKey[key];
     panel.style.setProperty('--accent', s.color);
     body.style.setProperty('--accent', s.color);
-    $('.panel-num').textContent = `0${s.index + 1} / 05`;
     $('.panel-planet').textContent = s.planet;
     $('.panel-title').textContent = s.title;
     panelBody.innerHTML = views[key]();
@@ -292,11 +303,11 @@
           <div><h4>Giải pháp</h4><p>${esc(p.solution)}</p></div>
         </div>
         <h4>Tính năng chính</h4>
-        <ul class="pd-features">${p.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+        <ul class="pd-features">${p.features.map(f => `<li>${icon('check')}${esc(f)}</li>`).join('')}</ul>
         <div class="pd-result"><span>Kết quả</span>${esc(p.result)}</div>
-        <div class="chips">${p.tech.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>
+        <p class="inline-list">${p.tech.map(t => `<span>${esc(t)}</span>`).join('')}</p>
         <div class="pd-actions">
-          <button class="btn btn-primary sample-link">Xem demo <span aria-hidden="true">↗</span></button>
+          <button class="btn btn-primary sample-link">Xem demo ${icon('arrowUpRight')}</button>
           <button class="btn btn-ghost sample-link">Mã nguồn</button>
         </div>
       </div>`;
@@ -362,6 +373,7 @@
         host: $('#space'),
         labels,
         reduced,
+        avoid: () => (body.classList.contains('is-focused') ? [] : $$('.hero-title, .hero-role, .hero-text, .hero-actions, .hero-status').map(el => el.getBoundingClientRect()).filter(r => r.width)),
         onProgress: p => { pct.textContent = Math.round(p * 100) + '%'; },
         onReady: markReady,
         onHover: key => {

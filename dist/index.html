@@ -25,7 +25,7 @@
   <link rel="icon" href="assets/avatar.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
   <script src="config.js" defer></script>
   <script src="assets/vendor/three.min.js" defer></script>
@@ -53,7 +53,6 @@
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <p class="hero-status"><span class="pulse"></span><span data-bind="status"></span></p>
       <h1 id="hero-title" class="hero-title">
         <span class="reveal">Xin chào, mình là</span>
         <span class="reveal hero-name" data-bind="name"></span>
@@ -61,26 +60,27 @@
       <p class="hero-role reveal"><span data-bind="role"></span></p>
       <p class="hero-text reveal" data-bind="tagline"></p>
       <div class="hero-actions reveal">
-        <a class="btn btn-primary" href="#projects">Xem dự án <span aria-hidden="true">→</span></a>
+        <a class="btn btn-primary" href="#projects">Xem dự án <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-ghost" href="#about">Về mình</a>
       </div>
+      <p class="hero-status reveal"><span class="status-dot"></span><span data-bind="status"></span></p>
     </section>
 
     <div class="planet-tags" aria-label="Các hành tinh"></div>
-    <p class="hint"><span class="hint-dot"></span>Chạm vào một hành tinh để khám phá</p>
+    <p class="hint">Chạm vào một hành tinh để khám phá</p>
 
     <aside class="panel" aria-hidden="true" aria-labelledby="panel-title" tabindex="-1">
       <div class="panel-head">
         <div>
-          <p class="panel-kicker"><span class="panel-num"></span><span class="panel-planet"></span></p>
           <h2 id="panel-title" class="panel-title"></h2>
+          <p class="panel-planet"></p>
         </div>
-        <button class="icon-btn panel-close" aria-label="Đóng và quay về hệ hành tinh">✕</button>
+        <button class="icon-btn panel-close" aria-label="Đóng và quay về hệ hành tinh"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="panel-body"></div>
       <div class="panel-foot">
-        <button class="foot-btn prev"><span aria-hidden="true">←</span><span class="foot-label"></span></button>
-        <button class="foot-btn next"><span class="foot-label"></span><span aria-hidden="true">→</span></button>
+        <button class="foot-btn prev"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="foot-label"></span></button>
+        <button class="foot-btn next"><span class="foot-label"></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </aside>
   </main>
@@ -91,7 +91,7 @@
   </div>
 
   <dialog id="project-dialog" aria-labelledby="pd-title">
-    <button class="icon-btn dialog-close" aria-label="Đóng">✕</button>
+    <button class="icon-btn dialog-close" aria-label="Đóng"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <div class="dialog-body"></div>
   </dialog>
   <div class="toast" role="status" aria-live="polite"></div>

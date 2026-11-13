@@ -36,25 +36,25 @@ window.PORTFOLIO = {
       { value: '98', label: 'điểm Lighthouse TB' }
     ],
     values: [
-      { icon: '◐', title: 'Rõ ràng trước', text: 'Hiểu đúng bài toán rồi mới chọn công nghệ. Giải pháp vừa đủ luôn thắng giải pháp phức tạp.' },
-      { icon: '✦', title: 'Chăm chút trải nghiệm', text: 'Chuyển động có chủ đích, trạng thái tải rõ ràng, dùng tốt bằng bàn phím và trên điện thoại.' },
-      { icon: '⌘', title: 'Code để người sau đọc', text: 'Module rõ ràng, test cho luồng quan trọng, tài liệu ngắn mà đủ.' },
-      { icon: '↻', title: 'Ship sớm, cải thiện liên tục', text: 'Đưa bản chạy được tới người dùng thật càng sớm càng tốt, rồi đo đạc và lặp lại.' }
+      { icon: 'compass', title: 'Rõ ràng trước', text: 'Hiểu đúng bài toán rồi mới chọn công nghệ. Giải pháp vừa đủ luôn thắng giải pháp phức tạp.' },
+      { icon: 'sparkles', title: 'Chăm chút trải nghiệm', text: 'Chuyển động có chủ đích, trạng thái tải rõ ràng, dùng tốt bằng bàn phím và trên điện thoại.' },
+      { icon: 'code', title: 'Code để người sau đọc', text: 'Module rõ ràng, test cho luồng quan trọng, tài liệu ngắn mà đủ.' },
+      { icon: 'refresh', title: 'Ship sớm, cải thiện liên tục', text: 'Đưa bản chạy được tới người dùng thật càng sớm càng tốt, rồi đo đạc và lặp lại.' }
     ],
     now: [
-      { icon: '⚒', label: 'Đang xây', value: 'Một công cụ quản lý chi tiêu nhóm cho bạn bè đi du lịch' },
-      { icon: '◎', label: 'Đang học', value: 'Rust và WebGPU cho đồ họa hiệu năng cao' },
-      { icon: '❒', label: 'Đang đọc', value: '“Designing Data-Intensive Applications”' },
-      { icon: '♪', label: 'Đang nghe', value: 'Lo-fi, city pop và podcast công nghệ' }
+      { icon: 'hammer', label: 'Đang xây', value: 'Một công cụ quản lý chi tiêu nhóm cho bạn bè đi du lịch' },
+      { icon: 'learn', label: 'Đang học', value: 'Rust và WebGPU cho đồ họa hiệu năng cao' },
+      { icon: 'book', label: 'Đang đọc', value: '“Designing Data-Intensive Applications”' },
+      { icon: 'music', label: 'Đang nghe', value: 'Lo-fi, city pop và podcast công nghệ' }
     ],
     hobbies: ['Vẽ minh họa', 'Chụp ảnh đường phố', 'Đạp xe', 'Cà phê specialty', 'Board game', 'Creative coding']
   },
 
   services: [
-    { icon: '◇', title: 'Website & Landing page', text: 'Nhanh, chuẩn SEO, chuyển động tinh tế, dễ tự cập nhật nội dung.' },
-    { icon: '▣', title: 'Web app / SaaS', text: 'Từ MVP đến sản phẩm có người dùng: đăng nhập, thanh toán, dashboard.' },
-    { icon: '⇄', title: 'API & Backend', text: 'Thiết kế API, cơ sở dữ liệu, xác thực, tích hợp bên thứ ba.' },
-    { icon: '✧', title: 'Trải nghiệm 3D / tương tác', text: 'Three.js, WebGL, hiệu ứng cuộn — những trang khiến người xem dừng lại.' }
+    { icon: 'layout', title: 'Website & Landing page', text: 'Nhanh, chuẩn SEO, chuyển động tinh tế, dễ tự cập nhật nội dung.' },
+    { icon: 'layers', title: 'Web app / SaaS', text: 'Từ MVP đến sản phẩm có người dùng: đăng nhập, thanh toán, dashboard.' },
+    { icon: 'server', title: 'API & Backend', text: 'Thiết kế API, cơ sở dữ liệu, xác thực, tích hợp bên thứ ba.' },
+    { icon: 'box', title: 'Trải nghiệm 3D / tương tác', text: 'Three.js, WebGL, hiệu ứng cuộn — những trang khiến người xem dừng lại.' }
   ],
 
   // level: 1–5 · years: số năm sử dụng
