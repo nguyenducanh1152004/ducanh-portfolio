@@ -531,3 +531,9 @@ dialog .toast { display: none; }
   .highlights .stat strong, .skill-summary strong { font-size: 22px; }
   .story li { grid-template-columns: 48px 1fr; gap: 10px; }
 }
+
+/* nhãn hành tinh gọn hơn trên điện thoại */
+@media (max-width: 600px) {
+  .planet-tag { gap: 6px; padding: 3px 10px 3px 4px; font-size: 12px; }
+  .tag-num { width: 19px; height: 19px; font-size: 9.5px; }
+}

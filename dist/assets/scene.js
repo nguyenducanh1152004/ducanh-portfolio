@@ -346,19 +346,87 @@ window.Space = (() => {
     let elapsed = 0, raf = 0;
     const proj = new T.Vector3();
 
-    function placeLabels() {
+    /* Nhãn hành tinh: đặt sao cho không đè lên nhau, không che hành tinh/mặt trời.
+       Mỗi nhãn thử 4 vị trí (dưới, trên, phải, trái) và chọn chỗ ít chồng lấn nhất;
+       giữ vị trí cũ nếu vẫn ổn để nhãn không nhảy qua lại, và trượt mượt tới vị trí mới. */
+    const SIDES = ['below', 'above', 'right', 'left'];
+    const sunScreen = { x: 0, y: 0, r: 0 };
+    function screenOf(world, radius, out, halfH) {
+      const dist = world.distanceTo(camera.position);
+      world.project(camera);
+      out.x = (world.x * 0.5 + 0.5) * W;
+      out.y = (-world.y * 0.5 + 0.5) * H;
+      out.r = (radius / (dist * halfH)) * (H / 2);
+      out.behind = world.z > 1;
+      return out;
+    }
+    function rectAt(side, s, w, h) {
+      const gap = 8;
+      if (side === 'below') return { x: s.x - w / 2, y: s.y + s.lr + gap, w, h };
+      if (side === 'above') return { x: s.x - w / 2, y: s.y - s.lr - gap - h, w, h };
+      if (side === 'right') return { x: s.x + s.lr + gap, y: s.y - h / 2, w, h };
+      return { x: s.x - s.lr - gap - w, y: s.y - h / 2, w, h };
+    }
+    function overlapRect(a, b) {
+      const ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+      const oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+      return ox > 0 && oy > 0 ? ox * oy : 0;
+    }
+    function overlapCircle(a, c) {
+      const k = c.r * 0.85; // ô vuông nội tiếp gần đúng của hình tròn
+      return overlapRect(a, { x: c.x - k, y: c.y - k, w: 2 * k, h: 2 * k });
+    }
+    function cost(rect, placed, circles) {
+      let c = 0;
+      placed.forEach(o => { c += overlapRect(rect, o) * 3; });
+      circles.forEach(o => { c += overlapCircle(rect, o); });
+      const m = 6; // ra ngoài màn hình hoặc chui dưới thanh menu
+      const top = W < 900 || W / H < 1.25 ? 120 : 76;
+      if (rect.x < m) c += (m - rect.x) * rect.h;
+      if (rect.x + rect.w > W - m) c += (rect.x + rect.w - W + m) * rect.h;
+      if (rect.y < top) c += (top - rect.y) * rect.w;
+      if (rect.y + rect.h > H - 56) c += (rect.y + rect.h - H + 56) * rect.w;
+      return c;
+    }
+    function placeLabels(dt = 0.016) {
       const halfH = Math.tan(T.MathUtils.degToRad(camera.fov / 2));
+      screenOf(proj.set(0, 0, 0), SUN_R, sunScreen, halfH);
+      const circles = [sunScreen];
+      const items = [];
       planets.forEach(p => {
         if (!p.label) return;
+        const s = p.screen || (p.screen = {});
         planetWorld(p, proj);
-        const dist = proj.distanceTo(camera.position);
-        proj.project(camera);
-        if (proj.z > 1) { p.label.style.visibility = 'hidden'; return; }
-        const x = (proj.x * 0.5 + 0.5) * W;
-        const y = (-proj.y * 0.5 + 0.5) * H;
-        const rPx = (p.spec.r / (dist * halfH)) * (H / 2);
-        p.label.style.visibility = '';
-        p.label.style.transform = `translate3d(${x.toFixed(1)}px,${(y + rPx + 10).toFixed(1)}px,0) translateX(-50%)`;
+        screenOf(proj, p.spec.r * p.pivot.scale.x, s, halfH);
+        s.lr = s.r * (p.spec.ring ? 2.15 : 1.05);
+        if (s.behind) { p.label.style.visibility = 'hidden'; return; }
+        circles.push({ x: s.x, y: s.y, r: s.lr });
+        items.push(p);
+      });
+      if (mode === 'focus') return; // nhãn đã ẩn khi xem cận cảnh
+      // nhãn gần camera (to hơn) được ưu tiên đặt trước
+      items.sort((a, b) => b.screen.r - a.screen.r);
+      const placed = [];
+      items.forEach(p => {
+        const el = p.label;
+        const w = el.offsetWidth, h = el.offsetHeight; // đọc lại mỗi khung: font tải xong / đổi cỡ chữ
+        const others = circles.filter(c => Math.abs(c.x - p.screen.x) > 0.5 || Math.abs(c.y - p.screen.y) > 0.5);
+        let best = null, bestCost = Infinity, bestSide = p.side || 'below';
+        SIDES.forEach(side => {
+          const r = rectAt(side, p.screen, w, h);
+          // ưu tiên giữ nguyên vị trí cũ, sau đó ưu tiên “dưới”
+          const bias = (side === p.side ? 0 : 60) + SIDES.indexOf(side) * 5;
+          const c = cost(r, placed, others) + bias;
+          if (c < bestCost) { bestCost = c; best = r; bestSide = side; }
+        });
+        p.side = bestSide;
+        best.x = Math.max(6, Math.min(W - 6 - w, best.x)); // luôn nằm trong màn hình
+        placed.push(best);
+        if (p.lx === undefined) { p.lx = best.x; p.ly = best.y; }
+        p.lx = damp(p.lx, best.x, 12, dt);
+        p.ly = damp(p.ly, best.y, 12, dt);
+        el.style.visibility = '';
+        el.style.transform = `translate3d(${p.lx.toFixed(1)}px,${p.ly.toFixed(1)}px,0)`;
       });
     }
 
@@ -426,7 +494,7 @@ window.Space = (() => {
       }
       applyCamera();
       if (!down || !dragged) pick();
-      placeLabels();
+      placeLabels(dt);
       renderer.render(scene, camera);
     }
     frame();
