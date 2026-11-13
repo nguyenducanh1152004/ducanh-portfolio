@@ -50,4 +50,4 @@ Dự án và kinh nghiệm hiện là **nội dung minh họa** để thử giao
 npm run check
 ```
 
-Thư mục deploy tĩnh là `dist/` (đã có `vercel.json`). Bản cũ được lưu ở `D:\portfolio-backup-v3`.
+Thư mục deploy tĩnh là `dist/` (đã có `vercel.json`).
