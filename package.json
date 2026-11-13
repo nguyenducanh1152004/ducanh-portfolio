@@ -1,0 +1,11 @@
+{
+  "name": "duc-anh-galaxy-portfolio",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Portfolio Đức Anh — hệ hành tinh 3D tương tác",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check dist/config.js && node --check dist/assets/scene.js && node --check dist/assets/main.js"
+  }
+}
